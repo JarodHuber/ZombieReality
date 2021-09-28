@@ -12,9 +12,11 @@ EditorBuildSettings:
     path: Assets/Scenes/GameOverScene.unity
     guid: f5eb50c946de2d94691c8a4d66a3d792
   m_configObjects:
-    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: bfa1182bd221b4ca89619141f66f1260,
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 51a492e28c3d6de4cb82fdb9d73dbdcf,
       type: 2}
-    Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: dc5a169419fa04987b057f65238cf3ba,
+    Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: 1a9b516faa154d749be63798d998a704,
       type: 2}
-    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 1a4c68ca72a83449f938d669337cb305,
+    com.unity.input.settings: {fileID: 11400000, guid: d52bbedf35803ce4b90ae1b7b87e0907,
+      type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: cc66da0982615b7408b03deba32c9ede,
       type: 2}

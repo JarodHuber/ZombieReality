@@ -21,20 +21,24 @@ public abstract class FireType : ScriptableObject
 
     protected ParticleSystem muzzle = null;
     protected AudioSource src = null;
-    protected AudioClip clip = null;
     protected TMP_Text ui = null;
 
-    public virtual void Initialize(ParticleSystem muzzleFlash, AudioSource source, AudioClip audioClip, TMP_Text ammoUI)
+    public virtual void Initialize(ParticleSystem muzzleFlash, AudioSource source, TMP_Text ammoUI)
     {
         muzzle = muzzleFlash;
         src = source;
-        clip = audioClip;
         ui = ammoUI;
         delayTimer.Reset(delayTimer.Delay);
         magazine.Reset();
     }
 
-    public abstract void Fire(Vector3 frontBarrel, Vector3 forward, BulletType bulletType);
+    public virtual void Fire(Vector3 frontBarrel, Vector3 forward, BulletType bulletType)
+    {
+        magazine.Count();
+        delayTimer.Reset();
+        muzzle.Play();
+        src.Play();
+    }
     public virtual void UnFire()
     {
         firing = false;

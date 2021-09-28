@@ -57,7 +57,6 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        print("player ow");
         healthRegenDelay.Reset();
         if (health.PreCheck(damage, false))
         {

@@ -14,6 +14,7 @@ public class SpreadBullet : BulletType
     [SerializeField] Timer fireHold = new Timer(.05f);
     [SerializeField] Material bulletMaterial = null;
     [SerializeField] float bulletWidth = 0.01f;
+    [SerializeField] LayerMask bulletMask = new LayerMask();
 
     bool lineLock = false;
     Vector3[] directions = new Vector3[0];
@@ -67,7 +68,7 @@ public class SpreadBullet : BulletType
 
         for (int x = 0; x < bulletCount; x++)
         {
-            if (Physics.Raycast(startPoint, (directions[x] - startPoint).normalized, out hit, range))
+            if (Physics.Raycast(startPoint, (directions[x] - startPoint).normalized, out hit, range, bulletMask, QueryTriggerInteraction.Ignore))
             {
                 endPoint = hit.point;
                 HandleCollision(hit);

@@ -15,11 +15,8 @@ public class LightTrigger : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        print("Triggered");
         if (called/* && !other.CompareTag("Player") && !other.CompareTag("Enemy")*/)
             return;
-
-        print("Generate Shadows");
 
         called = true;
         for (int x = 0; x < lightData.Length; ++x)

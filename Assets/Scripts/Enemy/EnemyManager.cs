@@ -33,9 +33,8 @@ public class EnemyManager : MonoBehaviour
 
     [Space(10)]
     [Tooltip("Explosion marker for new wave")]
-    [SerializeField] GameObject explosionFab;
-    [Tooltip("where explosion for new wave marker is spawned")]
-    [SerializeField] Transform explosionPoint;
+    [SerializeField] ParticleSystem explosionEffect = null;
+    [SerializeField] AudioSource explosionSource = null;
 
     [Header("Debug values, not to edit")]
     public SpawnStage stage = SpawnStage.WAITFORWAVEEND;
@@ -43,7 +42,6 @@ public class EnemyManager : MonoBehaviour
 
     List<SubWave> Wave = new List<SubWave>();
 
-    AudioSource audioSource;
     float pauseTime = 0;
     Timer waitTimer;
 
@@ -61,7 +59,6 @@ public class EnemyManager : MonoBehaviour
         EnemySounds.Initialize(enemySounds);
 
         waitTimer = new Timer(Delay);
-        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -160,39 +157,6 @@ public class EnemyManager : MonoBehaviour
         isPaused = false;
     }
 
-    //bool PauseCheck()
-    //{
-    //    if (isPaused)
-    //    {
-    //        if (enemiesEnabled)
-    //        {
-    //            for (int x = 0; x < enemies.Count; ++x)
-    //                enemies[x].Agent.StopAI = true;
-
-    //            pauseTime = Time.time;
-
-    //            enemiesEnabled = false;
-    //        }
-    //    }
-    //    else if (!enemiesEnabled)
-    //    {
-    //        for (int x = 0; x < enemies.Count; ++x)
-    //            enemies[x].Agent.StopAI = false;
-
-    //        pauseTime = Time.time - pauseTime;
-
-    //        if (waveNum > 0)
-    //        {
-    //            for (int x = 0; x < Wave.Count; ++x)
-    //                Wave[x].timestamp += pauseTime;
-    //        }
-
-    //        enemiesEnabled = true;
-    //    }
-
-    //    return isPaused;
-    //}
-
     #region Spawning Methods
     /// <summary>
     /// Wait for the next wave
@@ -230,6 +194,9 @@ public class EnemyManager : MonoBehaviour
 
         currentNumberOfEnemies = totalEnemiesForWave;
         stage = SpawnStage.SPAWNENEMIES;
+
+        explosionEffect.Play();
+        explosionSource.Play();
     }
 
     /// <summary>
@@ -294,12 +261,12 @@ public class EnemyManager : MonoBehaviour
 
         Vector3 target = enemy.Agent.target;
 
-        if (player.NavPos != enemy.Agent.target)
+        if (player.NavPos != target)
             target = player.NavPos;
 
         float distToPlayer = Vector3.Distance(enemy.Agent.NavPos, player.NavPos);
-        bool rayCast = Physics.Raycast(enemy.Agent.NavPos, (player.NavPos - enemy.Agent.NavPos).normalized, 
-            out RaycastHit hitInfo, distToPlayer, playerMask);
+        bool rayCast = Physics.Raycast(enemy.Agent.transform.position, (player.transform.position - enemy.Agent.NavPos).normalized, 
+            out RaycastHit hitInfo, distToPlayer, playerMask, QueryTriggerInteraction.Ignore);
 
         //Debug.DrawRay(enemy.Transform.position, (player.transform.position - enemy.Transform.position));
 

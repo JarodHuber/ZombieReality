@@ -8,12 +8,8 @@ public class AutoFire : FireType
 {
     public override void Fire(Vector3 frontBarrel, Vector3 forward, BulletType bulletType)
     {
-        magazine.Count();
-        delayTimer.Reset();
-
         bulletType.SetVelocity(frontBarrel, forward);
 
-        muzzle.Play();
-        src.PlayOneShot(clip);
+        base.Fire(frontBarrel, forward, bulletType);
     }
 }

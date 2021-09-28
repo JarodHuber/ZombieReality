@@ -16,7 +16,6 @@ public class Gun : SnappedGrabbableObj
     [Space(10)]
     [Tooltip("Prefab of the muzzle-flash particle system")]
     [SerializeField] ParticleSystem muzzleFlash = null;
-    [SerializeField] AudioClip fireClip = null;
 
     [Space(10)]
     [Tooltip("The force of the vibration in the controller")]
@@ -38,7 +37,7 @@ public class Gun : SnappedGrabbableObj
 
         muzzleFlash.transform.localScale *= fireEventScale;
 
-        fireType.Initialize(muzzleFlash, GetComponent<AudioSource>(), fireClip, ammoUI);
+        fireType.Initialize(muzzleFlash, GetComponent<AudioSource>(), ammoUI);
         bulletType.Initialize(gameObject, frontBarrel.transform.position, GameObject.FindGameObjectWithTag("GameController").GetComponent<EnemyManager>());
     }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//TODO: Recode this to minimize duplicate SOs
 [CreateAssetMenu(menuName = "Gun/Bullet/SingleBullet")]
 public class SingleBullet : BulletType
 {
@@ -10,6 +11,7 @@ public class SingleBullet : BulletType
     [SerializeField] Timer fireHold = new Timer(.05f);
     [SerializeField] Material bulletMaterial = null;
     [SerializeField] float bulletWidth = 0.01f;
+    [SerializeField] LayerMask bulletMask = new LayerMask();
 
     protected bool lineLock = false;
     LineRenderer bulletLine = null;
@@ -49,7 +51,7 @@ public class SingleBullet : BulletType
         Vector3 endPoint;
         RaycastHit hit;
 
-        if (Physics.Raycast(startPoint, (direction - startPoint).normalized, out hit, range))
+        if (Physics.Raycast(startPoint, (direction - startPoint).normalized, out hit, range, bulletMask, QueryTriggerInteraction.Ignore))
         {
             endPoint = hit.point;
             HandleCollision(hit);

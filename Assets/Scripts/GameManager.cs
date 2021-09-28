@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
+using UnityEditor;
 
 public class GameManager : MonoBehaviour
 {
@@ -103,9 +104,9 @@ public class GameManager : MonoBehaviour
         player.TogglePause(isPaused);
         enemyManager.TogglePause(isPaused);
 
-        pauseMenu.gameObject.SetActive(!IsPaused);
+        pauseMenu.gameObject.SetActive(isPaused);
 
-        if (!IsPaused)
+        if (isPaused)
         {
             IsPaused = true;
             currentState = GameState.PAUSE;
@@ -144,5 +145,11 @@ public class GameManager : MonoBehaviour
     private void OnDisable()
     {
         input.Disable();
+    }
+
+    private void OnDrawGizmos()
+    {
+        if(Selection.activeGameObject == gameObject)
+            Gizmos.DrawWireSphere(transform.position, areaRadius);
     }
 }

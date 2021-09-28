@@ -369,7 +369,6 @@ MonoBehaviour:
   frontBarrel: {fileID: 4362265723522472283}
   backBarrel: {fileID: 4362265724812383904}
   muzzleFlash: {fileID: 5540939989576214948}
-  fireClip: {fileID: 0}
   fireEventScale: 1
   ammoUI: {fileID: 4362265723438288666}
   bulletType: {fileID: 11400000, guid: 34eb15a948cb00b44b48267674a81cca, type: 2}
@@ -426,8 +425,9 @@ AudioSource:
   m_GameObject: {fileID: 4362265724467827709}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 3368899829367163153, guid: f1735cf60e945204ead404cbf3a0ffce,
+    type: 2}
+  m_audioClip: {fileID: 8300000, guid: 7d0ab319ce6860f4c8439a65074dc6f0, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
