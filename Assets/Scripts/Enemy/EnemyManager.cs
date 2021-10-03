@@ -16,7 +16,7 @@ public class EnemyManager : MonoBehaviour
     [Tooltip("Things you want the enemies to recognise in-between the player")]
     [SerializeField] LayerMask playerMask = new LayerMask();
     [Tooltip("List of general sounds the enemies make")]
-    [SerializeField] AudioClip[] enemySounds = new AudioClip[0];
+    [SerializeField] EnemySounds enemySounds = null;
 
     [Space(10, order = 0)]
     [Header("Spawning Variables", order = 1)]
@@ -56,9 +56,8 @@ public class EnemyManager : MonoBehaviour
 
     void Start()
     {
-        EnemySounds.Initialize(enemySounds);
-
         waitTimer = new Timer(Delay);
+        enemySounds.Initialize();
     }
 
     void Update()
@@ -257,7 +256,7 @@ public class EnemyManager : MonoBehaviour
             KillEnemy(enemy);
             return;
         }
-        enemy.PlayGeneralSound();
+        enemy.PlaySound();
 
         Vector3 target = enemy.Agent.target;
 
@@ -304,7 +303,9 @@ public class EnemyManager : MonoBehaviour
     /// </summary>
     public void SetEnemy(GameObject e, EnemyType enemyType)
     {
+        int enemyIndex = enemies.Count;
         enemies.Add(new Enemy(e.transform, e.GetComponent<AI>(), e.GetComponent<AudioSource>(), enemyTypes[(int)enemyType])); // TODO: Add enemy presets later
+        enemies[enemyIndex].enemySounds = enemySounds;
     }
 
     void KillEnemy(Enemy enemy)

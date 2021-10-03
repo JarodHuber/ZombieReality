@@ -29,6 +29,9 @@ public class Gun : SnappedGrabbableObj
     [SerializeField] FireType fireType = null;
 
     Vector3 Forward { get => (frontBarrel.transform.position - backBarrel.transform.position).normalized; }
+
+    FireType.FireData fireData;
+    BulletType.BulletData bulletData;
     #endregion
 
     protected override void Initialize()
@@ -37,8 +40,10 @@ public class Gun : SnappedGrabbableObj
 
         muzzleFlash.transform.localScale *= fireEventScale;
 
-        fireType.Initialize(muzzleFlash, GetComponent<AudioSource>(), ammoUI);
-        bulletType.Initialize(gameObject, frontBarrel.transform.position, GameObject.FindGameObjectWithTag("GameController").GetComponent<EnemyManager>());
+        bulletType.Initialize(GameObject.FindGameObjectWithTag("GameController").GetComponent<EnemyManager>());
+
+        fireData = fireType.InitializeFireData(muzzleFlash, GetComponent<AudioSource>(), ammoUI);
+        bulletData = bulletType.InitializeBulletData(gameObject, frontBarrel.transform.position);
     }
 
     private void Update()
@@ -46,8 +51,8 @@ public class Gun : SnappedGrabbableObj
         if (hand && hand.isPaused)
             return;
 
-        fireType.GunUpdate(frontBarrel.transform.position, Forward, bulletType);
-        bulletType.BulletUpdate(frontBarrel.transform.position);
+        fireType.GunUpdate(fireData, frontBarrel.transform.position, Forward, bulletType, bulletData);
+        bulletType.BulletUpdate(bulletData, frontBarrel.transform.position);
     }
 
     public override void Grab(Hand handGrabbing)
@@ -62,8 +67,8 @@ public class Gun : SnappedGrabbableObj
     }
     public override void Release()
     {
-        fireType.firing = false;
-        fireType.reloading = false;
+        fireData.firing = false;
+        fireData.reloading = false;
 
         hand.input["Fire"].performed -= AttemptFire;
         hand.input["Fire"].canceled -= AttemptUnFire;
@@ -75,8 +80,8 @@ public class Gun : SnappedGrabbableObj
     }
     public override void SwapHands(Hand newHand)
     {
-        fireType.firing = false;
-        fireType.reloading = false;
+        fireData.firing = false;
+        fireData.reloading = false;
 
         hand.input["Fire"].performed -= AttemptFire;
         hand.input["Fire"].canceled -= AttemptUnFire;
@@ -95,26 +100,26 @@ public class Gun : SnappedGrabbableObj
 
     void AttemptFire(InputAction.CallbackContext context)
     {
-        if (fireType.CanFire)
-            fireType.firing = true;
+        if (fireData.CanFire)
+            fireData.firing = true;
     }
     void AttemptUnFire(InputAction.CallbackContext context)
     {
-        if (fireType.firing)
-            fireType.UnFire();
+        if (fireData.firing)
+            fireType.UnFire(fireData);
     }
 
     void AttemptReload(InputAction.CallbackContext context)
     {
-        if (fireType.CanReload)
+        if (fireData.CanReload)
         {
-            fireType.reloading = true;
-            fireType.UnFire();
+            fireData.reloading = true;
+            fireType.UnFire(fireData);
         }
     }
     void AttemptUnReload(InputAction.CallbackContext context)
     {
-        if (fireType.reloading)
-            fireType.StopReload();
+        if (fireData.reloading)
+            fireType.StopReload(fireData);
     }
 }

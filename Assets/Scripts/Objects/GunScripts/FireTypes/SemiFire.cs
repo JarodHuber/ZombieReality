@@ -5,12 +5,12 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Gun/Fire/SemiFire")]
 public class SemiFire : FireType
 {
-    public override void Fire(Vector3 frontBarrel, Vector3 forward, BulletType bulletType)
+    public override void Fire(FireData data, Vector3 frontBarrel, Vector3 forward, BulletType bulletType, BulletType.BulletData bulletData)
     {
-        bulletType.SetVelocity(frontBarrel, forward);
+        bulletType.SetVelocity(bulletData, frontBarrel, forward);
 
-        base.Fire(frontBarrel, forward, bulletType);
+        base.Fire(data, frontBarrel, forward, bulletType, bulletData);
 
-        UnFire();
+        UnFire(data);
     }
 }

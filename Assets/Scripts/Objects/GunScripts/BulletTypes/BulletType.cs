@@ -14,22 +14,24 @@ public abstract class BulletType : ScriptableObject
 
     EnemyManager enemyManager = null;
 
-    public virtual void Initialize(GameObject gun, Vector3 frontBarrel, EnemyManager manager)
+    public void Initialize(EnemyManager manager)
     {
         enemyManager = manager;
     }
 
+    public abstract BulletData InitializeBulletData(GameObject gun, Vector3 frontBarrel);
+
     /// <summary>
     /// Sets the direction for the bullet to travel
     /// </summary>
-    public abstract void SetVelocity(Vector3 frontBarrel, Vector3 forward);
+    public abstract void SetVelocity(BulletData data, Vector3 frontBarrel, Vector3 forward);
 
     /// <summary>
     /// shoot the raycast
     /// </summary>
-    public abstract void CastEvent(Vector3 startPoint);
+    public abstract void CastEvent(BulletData data, Vector3 startPoint);
 
-    public abstract void BulletUpdate(Vector3 frontBarrel);
+    public abstract void BulletUpdate(BulletData data, Vector3 frontBarrel);
 
     /// <summary>
     /// what to do if the bullet hits
@@ -43,4 +45,13 @@ public abstract class BulletType : ScriptableObject
             enemyManager.GetEnemy(collision.transform).TakeDamage(damage);
         }
     }
+
+    public abstract class BulletData
+    {
+        public Timer bulletLifespan = new Timer(.05f);
+        public bool bulletInactive = false;
+
+        public LayerMask bulletMask = new LayerMask();
+    }
 }
+

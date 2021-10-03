@@ -5,84 +5,96 @@ using UnityEngine;
 
 public abstract class FireType : ScriptableObject
 {
-    [HideInInspector]
-    public bool firing = false, reloading = false;
     [Tooltip("How many bullets the gun can fire per reload")]
-    public Counter magazine = new Counter(10);
+    [SerializeField] int magazine = 10;
 
     [Space(10)]
     [Tooltip("the amount of time between each fire")]
-    [SerializeField] protected Timer delayTimer = new Timer(0);
+    [SerializeField] float delayTimer = 0.0f;
     [Tooltip("Time required to reload")]
-    [SerializeField] protected Timer reloadTimer = new Timer(1f);
+    [SerializeField] float reloadTimer = 1.0f;
 
-    public bool CanFire { get => delayTimer.IsComplete(false) && !reloading && !magazine.IsComplete(false); }
-    public bool CanReload { get => magazine.AmountRemaining < magazine.Max; }
-
-    protected ParticleSystem muzzle = null;
-    protected AudioSource src = null;
-    protected TMP_Text ui = null;
-
-    public virtual void Initialize(ParticleSystem muzzleFlash, AudioSource source, TMP_Text ammoUI)
+    public virtual FireData InitializeFireData(ParticleSystem muzzleFlash, AudioSource source, TMP_Text ammoUI)
     {
-        muzzle = muzzleFlash;
-        src = source;
-        ui = ammoUI;
-        delayTimer.Reset(delayTimer.Delay);
-        magazine.Reset();
+        FireData toReturn = new FireData();
+
+        toReturn.muzzle = muzzleFlash;
+        toReturn.src = source;
+        toReturn.ui = ammoUI;
+
+        toReturn.delayTimer = new Timer(delayTimer);
+        toReturn.magazine = new Counter(magazine);
+        toReturn.reloadTimer = new Timer(reloadTimer);
+
+        return toReturn;
     }
 
-    public virtual void Fire(Vector3 frontBarrel, Vector3 forward, BulletType bulletType)
+    public virtual void Fire(FireData data, Vector3 frontBarrel, Vector3 forward, BulletType bulletType, BulletType.BulletData bulletData)
     {
-        magazine.Count();
-        delayTimer.Reset();
-        muzzle.Play();
-        src.Play();
+        data.magazine.Count();
+        data.delayTimer.Reset();
+        data.muzzle.Play();
+        data.src.Play();
     }
-    public virtual void UnFire()
+    public virtual void UnFire(FireData data)
     {
-        firing = false;
+        data.firing = false;
         //delayTimer.Reset(delayTimer.Delay);
     }
     /// <summary>
     /// reload the gun
     /// </summary>
-    public virtual void Reload()
+    public virtual void Reload(FireData data)
     {
-        reloading = true;
-        reloadTimer.Count();
+        data.reloading = true;
+        data.reloadTimer.Count();
 
-        magazine.InverseLerp(reloadTimer.PercentComplete);
+        data.magazine.InverseLerp(data.reloadTimer.PercentComplete);
     }
 
     /// <summary>
     /// end reload
     /// </summary>
-    public virtual void StopReload()
+    public virtual void StopReload(FireData data)
     {
-        reloading = false;
-        reloadTimer.Reset();
+        data.reloading = false;
+        data.reloadTimer.Reset();
     }
 
-    public virtual void GunUpdate(Vector3 frontBarrel, Vector3 forward, BulletType bulletType)
+    public virtual void GunUpdate(FireData data, Vector3 frontBarrel, Vector3 forward, BulletType bulletType, BulletType.BulletData bulletData)
     {
-        if (firing)
+        if (data.firing)
         {
-            if (CanFire)
+            if (data.CanFire)
             {
-                Fire(frontBarrel, forward, bulletType);
-                ui.text = (int)magazine.AmountRemaining + "/" + magazine.Max;
+                Fire(data, frontBarrel, forward, bulletType, bulletData);
+                data.ui.text = (int)data.magazine.AmountRemaining + "/" + data.magazine.Max;
             }
         }
-        if (reloading)
+        if (data.reloading)
         {
-            if (CanReload)
+            if (data.CanReload)
             {
-                Reload();
-                ui.text = (int)magazine.AmountRemaining + "/" + magazine.Max;
+                Reload(data);
+                data.ui.text = (int)data.magazine.AmountRemaining + "/" + data.magazine.Max;
             }
         }
         else
-            delayTimer.Count();
+            data.delayTimer.Count();
+    }
+    public class FireData
+    {
+        public bool firing, reloading;
+        public Counter magazine;
+
+        public Timer delayTimer;
+        public Timer reloadTimer;
+
+        public ParticleSystem muzzle;
+        public AudioSource src;
+        public TMP_Text ui;
+
+        public bool CanFire { get => delayTimer.IsComplete(false) && !reloading && !magazine.IsComplete(false); }
+        public bool CanReload => magazine.AmountRemaining < magazine.Max;
     }
 }

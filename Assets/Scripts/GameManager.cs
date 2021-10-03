@@ -147,9 +147,8 @@ public class GameManager : MonoBehaviour
         input.Disable();
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
-        if(Selection.activeGameObject == gameObject)
-            Gizmos.DrawWireSphere(transform.position, areaRadius);
+        Gizmos.DrawWireSphere(transform.position, areaRadius);
     }
 }

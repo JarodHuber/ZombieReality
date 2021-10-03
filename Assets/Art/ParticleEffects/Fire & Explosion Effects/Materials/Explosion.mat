@@ -43,8 +43,8 @@ Material:
   stringTagMap:
     RenderType: Transparent
   disabledShaderPasses:
-  - DistortionVectors
   - MOTIONVECTORS
+  - DistortionVectors
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -112,12 +112,12 @@ Material:
     - _AddPrecomputedVelocity: 0
     - _AlbedoAffectEmissive: 0
     - _AlphaClip: 0
-    - _AlphaCutoff: 0.5
+    - _AlphaCutoff: 0.08
     - _AlphaCutoffEnable: 0
     - _AlphaDstBlend: 10
     - _AlphaSrcBlend: 1
     - _AlphaToMask: 0
-    - _AlphaToMaskInspectorValue: 0
+    - _AlphaToMaskInspectorValue: 1
     - _Blend: 0
     - _BlendMode: 0
     - _BlendOp: 0
@@ -128,7 +128,7 @@ Material:
     - _ColorMode: 0
     - _Cull: 0
     - _CullMode: 2
-    - _Cutoff: 0.5
+    - _Cutoff: 0.08
     - _DetailNormalMapScale: 1
     - _DistortionBlend: 0.5
     - _DistortionBlendMode: 0

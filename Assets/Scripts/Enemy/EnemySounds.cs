@@ -1,43 +1,69 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-static class EnemySounds
+[System.Serializable]
+public class EnemySounds
 {
-    static AudioClip[] clips = new AudioClip[0];
-    static float[] clipLock = new float[0];
+    [SerializeField] AudioClip[] generalClips = new AudioClip[0];
+    [SerializeField] AudioClip[] attackClips = new AudioClip[0];
+    
+    float[] generalClipLock = new float[0];
+    float[] attackClipLock = new float[0];
 
-    public static AudioClip Clip(int index)
+    public AudioClip Clip(int index)
     {
-        if (index >= clips.Length)
+        if (index >= generalClips.Length)
             return null;
 
-        return clips[index];
+        return generalClips[index];
     }
-    public static int ClipCount()
+    public int ClipCount(bool attackSound)
     {
-        return clips.Length;
-    }
-
-    public static void Initialize(AudioClip[] enemySounds)
-    {
-        clips = enemySounds;
-
-        clipLock = new float[enemySounds.Length];
-        for(int x = 0; x <clipLock.Length; ++x)
-            clipLock[x] = 1;
+        return (attackSound) ? attackClips.Length : generalClips.Length;
     }
 
-    public static AudioClip GetGeneralSound()
+    public void Initialize()
     {
-        if (!clipLock.Contains(1))
+        generalClipLock = new float[generalClips.Length];
+
+        attackClipLock = new float[attackClips.Length];
+    }
+    public void Initialize(AudioClip[] enemySounds, AudioClip[] attackSounds)
+    {
+        generalClips = enemySounds;
+        generalClipLock = new float[enemySounds.Length];
+
+        attackClips = attackSounds;
+        attackClipLock = new float[attackSounds.Length];
+    }
+
+    public AudioClip GetSound(bool attack)
+    {
+        int val = 0;
+
+        if (attack)
         {
-            for (int x = 0; x < clipLock.Length; x++)
-                clipLock[x] = 1;
+            if (!attackClipLock.Contains(1))
+            {
+                for (int x = 0; x < attackClipLock.Length; x++)
+                    attackClipLock[x] = 1;
+            }
+
+            val = Utils.SkewedNum(attackClipLock);
+            attackClipLock[val] = 0;
+
+            return attackClips[val];
         }
 
-        int val = Utils.SkewedNum(clipLock);
-        clipLock[val] = 0;
+        if (!generalClipLock.Contains(1))
+        {
+            for (int x = 0; x < generalClipLock.Length; x++)
+                generalClipLock[x] = 1;
+        }
 
-        return clips[val];
+        val = Utils.SkewedNum(generalClipLock);
+        generalClipLock[val] = 0;
+
+        return generalClips[val];
     }
 }

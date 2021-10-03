@@ -12,6 +12,9 @@ public class Enemy
     [SerializeField] int dmg = 1;
     [SerializeField] float spd = 7, rch = 3.0f;
 
+    [HideInInspector]
+    public EnemySounds enemySounds = null;
+
     public bool IsAlive { get => !hp.IsComplete(false); }
     public Transform Transform { get => trnfrm; }
     public AI Agent { get => mov; }
@@ -69,26 +72,30 @@ public class Enemy
     {
         if (atkT.Check())
         {
+            PlaySound(true);
             player.TakeDamage(dmg);
         }
     }
 
-    public void PlayGeneralSound()
+    public void PlaySound(bool attackSound = false)
     {
-        if (EnemySounds.ClipCount() == 0)
+        if (enemySounds.ClipCount(attackSound) == 0)
             return;
 
-        if (src.isPlaying)
+        if (!attackSound)
         {
-            if (sndT.Cur > 0.0f)
-                sndT.Reset();
+            if (src.isPlaying)
+            {
+                if (sndT.Cur > 0.0f)
+                    sndT.Reset();
 
-            return;
+                return;
+            }
+
+            if (!sndT.Check())
+                return;
         }
 
-        if (!sndT.Check())
-            return;
-
-        src.PlayOneShot(EnemySounds.GetGeneralSound());
+        src.PlayOneShot(enemySounds.GetSound(attackSound));
     }
 }

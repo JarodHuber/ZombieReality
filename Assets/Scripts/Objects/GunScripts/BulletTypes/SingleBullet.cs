@@ -8,75 +8,87 @@ public class SingleBullet : BulletType
 {
     [Header("Bullet Effect")]
     [Tooltip("How long the bullet line appears in the air")]
-    [SerializeField] Timer fireHold = new Timer(.05f);
     [SerializeField] Material bulletMaterial = null;
     [SerializeField] float bulletWidth = 0.01f;
-    [SerializeField] LayerMask bulletMask = new LayerMask();
 
-    protected bool lineLock = false;
-    LineRenderer bulletLine = null;
-
-    protected Vector3 direction = new Vector3();
-
-    public override void Initialize(GameObject gun, Vector3 frontBarrel, EnemyManager manager)
+    public override BulletData InitializeBulletData(GameObject gun, Vector3 frontBarrel)
     {
-        base.Initialize(gun, frontBarrel, manager);
+        SingleBulletData toReturn = new SingleBulletData();
 
         if (gun.GetComponent<LineRenderer>() == null)
-            bulletLine = gun.AddComponent<LineRenderer>();
+            toReturn.bulletLine = gun.AddComponent<LineRenderer>();
 
         Vector3[] initLaserPositions = new Vector3[2] { frontBarrel, frontBarrel };
-        bulletLine.SetPositions(initLaserPositions);
-        bulletLine.material = bulletMaterial;
-        bulletLine.startWidth = bulletWidth;
-        bulletLine.endWidth = bulletWidth;
-        bulletLine.enabled = false;
+        toReturn.bulletLine.SetPositions(initLaserPositions);
+        toReturn.bulletLine.material = bulletMaterial;
+        toReturn.bulletLine.startWidth = bulletWidth;
+        toReturn.bulletLine.endWidth = bulletWidth;
+        toReturn.bulletLine.enabled = false;
 
-        lineLock = true;
+        toReturn.bulletInactive = true;
+
+        return toReturn;
     }
 
-    public override void SetVelocity(Vector3 frontBarrel, Vector3 forward)
+    public override void SetVelocity(BulletData dataHold, Vector3 frontBarrel, Vector3 forward)
     {
-        direction = frontBarrel + (forward * range);
+        if (!(dataHold is SingleBulletData data))
+            return;
+
+        data.direction = frontBarrel + (forward * range);
 
         if (spread > 0)
-            direction += Random.insideUnitSphere * spread;
+            data.direction += Random.insideUnitSphere * spread;
 
-        CastEvent(frontBarrel);
+        CastEvent(dataHold, frontBarrel);
     }
 
-    public override void CastEvent(Vector3 startPoint)
+    public override void CastEvent(BulletData dataHold, Vector3 startPoint)
     {
-        lineLock = false;
+        if (!(dataHold is SingleBulletData data))
+            return;
+
+        data.bulletInactive = false;
         Vector3 endPoint;
         RaycastHit hit;
 
-        if (Physics.Raycast(startPoint, (direction - startPoint).normalized, out hit, range, bulletMask, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(startPoint, (data.direction - startPoint).normalized, out hit, range, 
+            data.bulletMask, QueryTriggerInteraction.Ignore))
         {
             endPoint = hit.point;
             HandleCollision(hit);
         }
         else
-            endPoint = direction;
+            endPoint = data.direction;
 
-        bulletLine.enabled = true;
-        bulletLine.SetPosition(0, startPoint);
-        bulletLine.SetPosition(1, endPoint);
+        data.bulletLine.enabled = true;
+        data.bulletLine.SetPosition(0, startPoint);
+        data.bulletLine.SetPosition(1, endPoint);
     }
 
-    public override void BulletUpdate(Vector3 frontBarrel)
+    public override void BulletUpdate(BulletData dataHold, Vector3 frontBarrel)
     {
-        if (lineLock) 
+        if (!(dataHold is SingleBulletData data))
             return;
 
-        if (fireHold.Check())
-        {
-            bulletLine.enabled = false;
+        if (data.bulletInactive) 
+            return;
 
-            lineLock = true;
+        if (data.bulletLifespan.Check())
+        {
+            data.bulletLine.enabled = false;
+
+            data.bulletInactive = true;
             return;
         }
 
-        bulletLine.SetPosition(0, frontBarrel);
+        data.bulletLine.SetPosition(0, frontBarrel);
+    }
+
+    public class SingleBulletData : BulletData
+    {
+        public LineRenderer bulletLine = null;
+        public Vector3 direction = new Vector3();
     }
 }
+
