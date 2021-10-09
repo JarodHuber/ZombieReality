@@ -6,6 +6,7 @@ TagManager:
   tags:
   - GrabbableObject
   - Enemy
+  - Holster
   layers:
   - Default
   - TransparentFX

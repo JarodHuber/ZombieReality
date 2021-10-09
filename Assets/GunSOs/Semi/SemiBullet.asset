@@ -15,10 +15,9 @@ MonoBehaviour:
   range: 50
   damage: 10
   spread: 0
-  fireHold:
-    max: 0.05
-  bulletMaterial: {fileID: 2100000, guid: 002cb40ba51bffe4a91d727db5a23976, type: 2}
-  bulletWidth: 0.01
+  bulletLifespan: 0.05
   bulletMask:
     serializedVersion: 2
     m_Bits: 187281
+  bulletMaterial: {fileID: 2100000, guid: 002cb40ba51bffe4a91d727db5a23976, type: 2}
+  bulletWidth: 0.01

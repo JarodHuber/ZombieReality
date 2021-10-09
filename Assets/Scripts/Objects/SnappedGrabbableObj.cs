@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class SnappedGrabbableObj : GrabbableObj
 {
-    Transform snapOffset = null;
+    [SerializeField] Transform snapOffset = null;
 
     protected override void Initialize()
     {
         base.Initialize();
 
+        if(!snapOffset)
         snapOffset = transform.GetChild(0);
     }
 

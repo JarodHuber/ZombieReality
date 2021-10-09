@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum EnemyType { BASE }
+public enum EnemyType { BASE, FAST }
 public class EnemyManager : MonoBehaviour
 {
     public enum SpawnStage { WAITFORWAVEEND, PREPAREWAVE, SPAWNENEMIES }
@@ -27,9 +27,15 @@ public class EnemyManager : MonoBehaviour
     [Tooltip("Different types of enemy, the variables for them")]
     [SerializeField] Enemy[] enemyTypes = new Enemy[0];
 
+    [SerializeField] int startingNumberOfEnemies = 6;
+    [SerializeField] float additionalBaseEnemiesPerWave = 2.0f;
+
+    [Range(0.0f, 1.0f)]
+    [SerializeField] float percentOfEnemiesRemainingBeforeNextWave = 0.5f;
+
     [Space(10)]
     [Tooltip("the minimum time in-between waves")]
-    [SerializeField] float Delay = 10f;
+    [SerializeField] Timer waitTimer = new Timer(10f);
 
     [Space(10)]
     [Tooltip("Explosion marker for new wave")]
@@ -43,7 +49,6 @@ public class EnemyManager : MonoBehaviour
     List<SubWave> Wave = new List<SubWave>();
 
     float pauseTime = 0;
-    Timer waitTimer;
 
     bool enemiesDisabled = true;
     List<Enemy> enemies = new List<Enemy>();
@@ -56,7 +61,6 @@ public class EnemyManager : MonoBehaviour
 
     void Start()
     {
-        waitTimer = new Timer(Delay);
         enemySounds.Initialize();
     }
 
@@ -162,7 +166,8 @@ public class EnemyManager : MonoBehaviour
     /// </summary>
     public void Wait()
     {
-        if (waitTimer.Check() && currentNumberOfEnemies <= totalEnemiesForWave / 2)
+        if (waitTimer.Check() && 
+            currentNumberOfEnemies <= totalEnemiesForWave * percentOfEnemiesRemainingBeforeNextWave)
             stage = SpawnStage.PREPAREWAVE;
     }
 
@@ -174,16 +179,25 @@ public class EnemyManager : MonoBehaviour
         ++waveNum;
         totalEnemiesForWave = currentNumberOfEnemies;
 
-        Wave.Add(new SubWave(waveNum, 0f, 0.5f, 6 + (int)(2.0f * (waveNum - 1)), EnemyType.BASE));
-        if (waveNum > 6)
+        Wave.Add(new SubWave(waveNum, 0f, 0.5f, startingNumberOfEnemies + (int)(additionalBaseEnemiesPerWave * (waveNum - 1)), EnemyType.BASE));
+        
+        if (waveNum >= 6)
+        {
             for (int i = 0; i < waveNum / 6; i++)
-                Wave.Add(new SubWave(waveNum, (i * 3) + 2, 0.75f, 1 + (int)(waveNum / 3), EnemyType.BASE));
-        if (waveNum > 12)
+                Wave.Add(new SubWave(waveNum, (i * 3) + 2, 0.75f, 1 + (waveNum / 3), EnemyType.FAST));
+        }
+
+        if (waveNum >= 12)
+        {
             for (int i = 0; i < (waveNum / 6) - 1; i++)
-                Wave.Add(new SubWave(waveNum, (i * 3) + 3, 1f, 1 + (int)(waveNum / 3), EnemyType.BASE));
-        if (waveNum > 24)
+                Wave.Add(new SubWave(waveNum, (i * 3) + 3, 1f, 1 + (waveNum / 3), EnemyType.BASE));
+        }
+
+        if (waveNum >= 18)
+        {
             for (int i = 0; i < (waveNum / 6) - 2; i++)
-                Wave.Add(new SubWave(waveNum, (i * 3) + 3, 1f, 1 + (int)(waveNum / 3), EnemyType.BASE));
+                Wave.Add(new SubWave(waveNum, (i * 3) + 3, 1f, 1 + (waveNum / 3), EnemyType.BASE));
+        }
 
         for (int x = 0; x < Wave.Count; ++x)
         {
@@ -228,9 +242,10 @@ public class EnemyManager : MonoBehaviour
     void SpawnEnemy(EnemyType type, int index)
     {
         Vector3 spawnLocation = spawnBounds[0].SpawnLoc();
-        SetEnemy(Instantiate(enemyFabs[(int)(((int)Wave[index].enemyType < enemyFabs.Length) ? Wave[index].enemyType : EnemyType.BASE)], spawnLocation,
+        EnemyType enemType = ((int)Wave[index].enemyType < enemyFabs.Length) ? Wave[index].enemyType : EnemyType.BASE;
+        SetEnemy(Instantiate(enemyFabs[(int)enemType], spawnLocation,
             Quaternion.LookRotation(new Vector3(player.transform.position.x, spawnLocation.y, player.transform.position.z) - spawnLocation, Vector3.up)),
-            ((int)Wave[index].enemyType < enemyFabs.Length) ? Wave[index].enemyType : EnemyType.BASE); // TODO: Replace instantiate with a pre-made pool
+            enemType); // TODO: Replace instantiate with a pre-made pool
     }
 
     void CycleSpawnBounds()
@@ -316,6 +331,11 @@ public class EnemyManager : MonoBehaviour
         Destroy(enemy.Transform.gameObject);
     }
 
+    public void DamageEnemy(Transform reference, float damage)
+    {
+        GetEnemy(reference).TakeDamage(damage);
+    }
+
     public Enemy GetEnemy(Transform reference)
     {
         for(int x = 0; x < enemies.Count; ++x)
@@ -323,6 +343,8 @@ public class EnemyManager : MonoBehaviour
             if (enemies[x].Transform == reference)
                 return enemies[x];
         }
+
+        Debug.LogError("no enemy found");
 
         return null;
     }

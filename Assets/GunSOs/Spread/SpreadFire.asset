@@ -12,11 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a40c7b15d533e424f9eb0a4a00971ab5, type: 3}
   m_Name: SpreadFire
   m_EditorClassIdentifier: 
-  firing: 0
-  reloading: 0
-  magazine:
-    max: 2
-  delayTimer:
-    max: 0.5
-  reloadTimer:
-    max: 0.75
+  magazine: 2
+  delayTimer: 0
+  reloadTimer: 1

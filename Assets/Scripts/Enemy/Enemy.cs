@@ -49,7 +49,6 @@ public class Enemy
 
     public void TakeDamage(float damage)
     {
-        Debug.Log("ow");
         hp.Count(damage);
     }
 

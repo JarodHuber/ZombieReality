@@ -11,7 +11,6 @@ public class Movement : MonoBehaviour
     [Space(10)]
     [SerializeField] float moveSpeed = 5.0f;
     [SerializeField] float rotSpeed = 15.0f;
-    [SerializeField] float gravity = 20.0f;
 
     [Space(10)]
     [SerializeField] Transform head = null;
@@ -20,7 +19,7 @@ public class Movement : MonoBehaviour
     CapsuleCollider col = null;
     Rigidbody rb = null;
 
-    [HideInInspector]
+    //[HideInInspector]
     public bool isPaused = false;
 
     bool grounded = true;
@@ -58,7 +57,7 @@ public class Movement : MonoBehaviour
         vel.y = rb.velocity.y;
 
         if (!grounded)
-            vel.y -= gravity * Time.deltaTime;
+            vel.y += Physics.gravity.y * Time.deltaTime;
 
         rb.velocity = vel; // TODO: Recode for Kinematic movement
     }

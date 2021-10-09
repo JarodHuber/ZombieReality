@@ -5,14 +5,23 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class GrabbableObj : MonoBehaviour
 {
-    [SerializeField] protected float gravity = 20;
+    public enum ObjectType
+    {
+        DEFAULT = 0,
+        GUN = 1,
+        GRENADE = 1 << 1
+    }
+
+    [SerializeField] ObjectType type = ObjectType.DEFAULT;
 
     protected Hand hand = null;
-    Rigidbody rb = null;
-    ThrowStamp stamp = new ThrowStamp();
-
+    protected Rigidbody rb = null;
     protected FixedJoint joint = null;
+
     public bool IsGrabbed { get => hand; }
+
+    ThrowStamp stamp = new ThrowStamp();
+    Holster hoveredHolster = null;
 
     private void Awake()
     {
@@ -24,17 +33,23 @@ public class GrabbableObj : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    private void FixedUpdate()
+    private void LateUpdate()
     {
         if (hand)
         {
             stamp = new ThrowStamp(transform.position, stamp, Time.deltaTime);
             return;
         }
-
-        rb.AddForce(0, -gravity, 0);
+    }
+    private void FixedUpdate()
+    {
+        rb.AddForce(Physics.gravity, ForceMode.Acceleration);
     }
 
+    /// <summary>
+    /// Sets up the Object to be grabbed by the players hand
+    /// </summary>
+    /// <param name="handGrabbing">The relevant hand that will be grabbing the object</param>
     public virtual void Grab(Hand handGrabbing)
     {
         hand = handGrabbing;
@@ -42,22 +57,42 @@ public class GrabbableObj : MonoBehaviour
         //joint = gameObject.AddComponent<FixedJoint>();
         //joint.connectedBody = handGrabbing.Rigidbody;
 
-        rb.isKinematic = true;
+        if (hoveredHolster && hoveredHolster.isHolstering)
+            hoveredHolster.isHolstering = false;
+        else
+            rb.isKinematic = true;
+
         transform.SetParent(handGrabbing.transform);
 
         stamp = new ThrowStamp(transform.position);
     }
 
+    /// <summary>
+    /// Sets up the object to be released by the player
+    /// </summary>
     public virtual void Release()
     {
-        //Destroy(joint);
         hand = null;
+
+        if (hoveredHolster && !hoveredHolster.isHolstering)
+        {
+            hoveredHolster.HolsterContains(type);
+            transform.SetParent(hoveredHolster.transform);
+            return;
+        }
+
+        //Destroy(joint);
 
         transform.SetParent(null);
         rb.isKinematic = false;
+        stamp.print();
         rb.AddForce(stamp.Velocity, ForceMode.Impulse);
     }
 
+    /// <summary>
+    /// Sets up the object to be swapped to the player's other hand
+    /// </summary>
+    /// <param name="newHand">The relevant hand that will be grabbing the object</param>
     public virtual void SwapHands(Hand newHand)
     {
         hand.SwapHands();
@@ -70,6 +105,22 @@ public class GrabbableObj : MonoBehaviour
         stamp = new ThrowStamp(transform.position);
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        // Store the holster data for grabbing and releasing
+        if (other.CompareTag("Holster"))
+            hoveredHolster = other.GetComponent<Holster>();
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        // Disable the holster data
+        if (hoveredHolster && other.transform == hoveredHolster.transform)
+            hoveredHolster = null;
+    }
+
+    /// <summary>
+    /// Velocity data for throwing the object on release
+    /// </summary>
     struct ThrowStamp
     {
         private Vector3 pos;
@@ -95,7 +146,15 @@ public class GrabbableObj : MonoBehaviour
             velDir = curVel;
 
             if(Vector3.Angle(prevStamp.velDir, curVel) < 45.0f)
+            {
+                Debug.Log("new dir");
                 velDir += prevStamp.velDir;
+            }
+        }
+
+        public void print()
+        {
+            Debug.Log(pos + " : " + velDir + " * " + velForce + " = " + Velocity);
         }
     }
 }

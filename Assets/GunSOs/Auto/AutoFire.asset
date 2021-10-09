@@ -12,11 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92e2e5d4a2e72e3428047ca945aec0ed, type: 3}
   m_Name: AutoFire
   m_EditorClassIdentifier: 
-  firing: 0
-  reloading: 0
-  magazine:
-    max: 50
-  delayTimer:
-    max: 0.05
-  reloadTimer:
-    max: 1.5
+  magazine: 50
+  delayTimer: 0.1
+  reloadTimer: 1

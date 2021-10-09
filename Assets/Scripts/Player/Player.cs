@@ -14,7 +14,6 @@ public class Player : MonoBehaviour
     [SerializeField] Timer healthRegenDelay = new Timer(1.0f);
     [SerializeField] Timer healthRegenCycle = new Timer(0.1f);
 
-    float[] attackSoundLock = new float[0];
     AudioSource src = null;
     Movement mover = null;
 
@@ -63,22 +62,12 @@ public class Player : MonoBehaviour
             // TODO: Die
             UnityEngine.SceneManagement.SceneManager.LoadScene("GameOverScene");
         }
-
-        //PlayAttackSound();
     }
 
-    void PlayAttackSound()
+    public void NearKill()
     {
-        if (!attackSoundLock.Contains(1))
-        {
-            for (int x = 0; x < attackSoundLock.Length; x++)
-                attackSoundLock[x] = 1;
-        }
-
-        int val = Utils.SkewedNum(attackSoundLock);
-        attackSoundLock[val] = 0;
-
-        // TODO: Implement getting hit sounds
+        healthRegenDelay.Reset();
+        health.Reset(health.Max - 1);
     }
 
     public void WristUpdate(int enemyNum, int waveNum)

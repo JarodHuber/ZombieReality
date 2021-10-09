@@ -12,15 +12,21 @@ public class AI : MonoBehaviour
     [SerializeField] State currentState = State.Stop;
 
     [Space(10)]
+    [Tooltip("Target of the AI")]
     public Vector3 target = new Vector3();
+    [Tooltip("How fast the AI moves")]
     public float speed = 5.0f;
+    [Tooltip("Turning speed of the AI")]
     [SerializeField] float turningSpeed = 30.0f;
-    [SerializeField] float gravity = 20.0f;
 
     [Space(10)]
+    [Tooltip("Physical radius of the AI")]
     [SerializeField] float radius = 0.5f;
+    [Tooltip("Height of the AI")]
     [SerializeField] float height = 2.0f;
+    [Tooltip("How far the AI should stop before the target")]
     [SerializeField] float stoppingDist = 1.0f;
+    [Tooltip("How much time to spend in-between path recalculation")]
     [SerializeField] Timer calcPathCallBackRate = new Timer(3.0f);
     [SerializeField] float cornerDistBuffer = 1.0f;
     [SerializeField] bool ignoreDistToTarget = true;
@@ -76,6 +82,7 @@ public class AI : MonoBehaviour
 
     private void Update()
     {
+        // Update variables to set the AI into a paused state
         if (PauseAI && currentState != State.Stop)
         {
             stateBeforePause = currentState;
@@ -96,7 +103,8 @@ public class AI : MonoBehaviour
                 }
                 else if (!ignoreDistToTarget && !active)
                     active = Vector3.Distance(target, NavPos) > stoppingDist;
-                    return;
+
+                return;
             case State.NavMesh: // AI traveling along nav mesh
                 if (calcPathCallBackRate.Check())
                     CalculateNavPath();
@@ -124,7 +132,7 @@ public class AI : MonoBehaviour
 
         // Make the AI fall
         if (!isGrounded)
-            velocity.y -= gravity * Time.deltaTime;
+            velocity.y += Physics.gravity.y * Time.deltaTime;
 
         // Assign velocity
         rb.velocity = velocity; // TODO: Replace this with AddForce
@@ -163,7 +171,7 @@ public class AI : MonoBehaviour
 
         // Make the AI fall
         if (!isGrounded)
-            velocity.y -= gravity * Time.deltaTime;
+            velocity.y += Physics.gravity.y * Time.deltaTime;
 
         // Assign velocity
         rb.velocity = velocity; // TODO: Replace this with AddForce
@@ -235,6 +243,9 @@ public class AI : MonoBehaviour
         path = navPath.corners;
     }
 
+    /// <summary>
+    /// Check to see if the AI is touching the ground
+    /// </summary>
     void GroundCheck()
     {
         float height = (((rb.position.y - transform.position.y) / transform.localScale.y) / 2) - radius;
@@ -242,6 +253,10 @@ public class AI : MonoBehaviour
         isGrounded = Physics.SphereCast(rb.position, radius - 0.05f, Vector3.down, out RaycastHit hit, height + 0.06f);
     }
 
+    /// <summary>
+    /// Update the target then recalculate the new path
+    /// </summary>
+    /// <param name="destination">the new destination for the AI to travel towards</param>
     public void SetDestination(Vector3 destination)
     {
         target = destination;

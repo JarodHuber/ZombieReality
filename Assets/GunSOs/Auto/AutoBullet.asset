@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa5429843c51ccf4d8e394b552a9cc85, type: 3}
   m_Name: AutoBullet
   m_EditorClassIdentifier: 
-  range: 30
+  range: 25
   damage: 3
   spread: 1
-  fireHold:
-    max: 0.05
+  bulletLifespan: 0.05
+  bulletMask:
+    serializedVersion: 2
+    m_Bits: 187281
   bulletMaterial: {fileID: 2100000, guid: 002cb40ba51bffe4a91d727db5a23976, type: 2}
   bulletWidth: 0.01
