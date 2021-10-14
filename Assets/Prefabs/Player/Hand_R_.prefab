@@ -1100,7 +1100,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1118533290885417659}
   - component: {fileID: 1118533290882210737}
-  - component: {fileID: 1399711165330354260}
   m_Layer: 16
   m_Name: Hand_R
   m_TagString: Untagged
@@ -1201,20 +1200,6 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.000014133824, y: 0.0030211583, z: 0.00029374237}
     m_Extent: {x: 0.00036461034, y: 0.0013348158, z: 0.00092178}
   m_DirtyAABB: 0
---- !u!64 &1399711165330354260
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1118533290885322459}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &1118533290885322461
 GameObject:
   m_ObjectHideFlags: 0
@@ -1768,7 +1753,6 @@ GameObject:
   - component: {fileID: 6492561554027235925}
   - component: {fileID: 7476636614806751223}
   - component: {fileID: 8007256905939121775}
-  - component: {fileID: 4194882825170902266}
   m_Layer: 16
   m_Name: Plane (1)(Clone)
   m_TagString: Untagged
@@ -2361,20 +2345,6 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6126150738718107460}
-  m_Mesh: {fileID: 0}
---- !u!64 &4194882825170902266
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6126150738718107460}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
   m_Mesh: {fileID: 0}
 --- !u!1 &6833572935096920053
 GameObject:

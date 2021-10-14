@@ -86,15 +86,15 @@ public class Grenade : GrabbableObj
         base.Grab(handGrabbing);
 
         // Add relevent methods to the InputActionMap
-        hand.input["Fire"].performed += PullPin;
-        hand.input["Fire"].canceled += ReleaseLever;
+        hand.InputMap["TriggerPress"].performed += PullPin;
+        hand.InputMap["TriggerPress"].canceled += ReleaseLever;
     }
 
     public override void Release()
     {
         // Remove relevent methods to the InputActionMap
-        hand.input["Fire"].performed -= PullPin;
-        hand.input["Fire"].canceled -= ReleaseLever;
+        hand.InputMap["TriggerPress"].performed -= PullPin;
+        hand.InputMap["TriggerPress"].canceled -= ReleaseLever;
 
         // Do basic object releasing
         base.Release();
@@ -102,15 +102,15 @@ public class Grenade : GrabbableObj
     public override void SwapHands(Hand newHand)
     {
         // Remove relevent methods to the InputActionMap
-        hand.input["Fire"].performed -= PullPin;
-        hand.input["Fire"].canceled -= ReleaseLever;
+        hand.InputMap["TriggerPress"].performed -= PullPin;
+        hand.InputMap["TriggerPress"].canceled -= ReleaseLever;
         
         //Do basic object swapping
         base.SwapHands(newHand);
 
         // Add relevent methods to the InputActionMap
-        hand.input["Fire"].performed += PullPin;
-        hand.input["Fire"].canceled += ReleaseLever;
+        hand.InputMap["TriggerPress"].performed += PullPin;
+        hand.InputMap["TriggerPress"].canceled += ReleaseLever;
     }
 
     void PullPin(InputAction.CallbackContext context)
@@ -125,7 +125,7 @@ public class Grenade : GrabbableObj
 
     private void DestroySelf()
     {
-        Destroy(gameObject); // TODO: replace this with object cycler
+        gameObject.SetActive(false);
     }
 
     private void OnDrawGizmosSelected()

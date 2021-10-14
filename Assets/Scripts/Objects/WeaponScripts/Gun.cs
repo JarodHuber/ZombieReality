@@ -62,11 +62,11 @@ public class Gun : SnappedGrabbableObj
         base.Grab(handGrabbing);
 
         // Add relevent methods to the InputActionMap
-        hand.input["Fire"].performed += AttemptFire;
-        hand.input["Fire"].canceled += AttemptUnFire;
+        hand.InputMap["TriggerPress"].performed += AttemptFire;
+        hand.InputMap["TriggerPress"].canceled += AttemptUnFire;
 
-        hand.input["Reload"].performed += AttemptReload;
-        hand.input["Reload"].canceled += AttemptUnReload;
+        hand.InputMap["LowerButtonPress"].performed += AttemptReload;
+        hand.InputMap["LowerButtonPress"].canceled += AttemptUnReload;
     }
     public override void Release()
     {
@@ -74,11 +74,11 @@ public class Gun : SnappedGrabbableObj
         fireData.reloading = false;
 
         // Remove relevent methods to the InputActionMap
-        hand.input["Fire"].performed -= AttemptFire;
-        hand.input["Fire"].canceled -= AttemptUnFire;
+        hand.InputMap["TriggerPress"].performed -= AttemptFire;
+        hand.InputMap["TriggerPress"].canceled -= AttemptUnFire;
 
-        hand.input["Reload"].performed -= AttemptReload;
-        hand.input["Reload"].canceled -= AttemptUnReload;
+        hand.InputMap["LowerButtonPress"].performed -= AttemptReload;
+        hand.InputMap["LowerButtonPress"].canceled -= AttemptUnReload;
 
         // Do basic object releasing
         base.Release();
@@ -89,21 +89,21 @@ public class Gun : SnappedGrabbableObj
         fireData.reloading = false;
 
         // Remove relevent methods to the InputActionMap
-        hand.input["Fire"].performed -= AttemptFire;
-        hand.input["Fire"].canceled -= AttemptUnFire;
+        hand.InputMap["TriggerPress"].performed -= AttemptFire;
+        hand.InputMap["TriggerPress"].canceled -= AttemptUnFire;
 
-        hand.input["Reload"].performed -= AttemptReload;
-        hand.input["Reload"].canceled -= AttemptUnReload;
+        hand.InputMap["LowerButtonPress"].performed -= AttemptReload;
+        hand.InputMap["LowerButtonPress"].canceled -= AttemptUnReload;
 
         // Do basic objcet swapping
         base.SwapHands(newHand);
 
         // Add relevent methods to the InputActionMap
-        hand.input["Fire"].performed += AttemptFire;
-        hand.input["Fire"].canceled += AttemptUnFire;
+        hand.InputMap["TriggerPress"].performed += AttemptFire;
+        hand.InputMap["TriggerPress"].canceled += AttemptUnFire;
 
-        hand.input["Reload"].performed += AttemptReload;
-        hand.input["Reload"].canceled += AttemptUnReload;
+        hand.InputMap["LowerButtonPress"].performed += AttemptReload;
+        hand.InputMap["LowerButtonPress"].canceled += AttemptUnReload;
     }
 
     void AttemptFire(InputAction.CallbackContext context)

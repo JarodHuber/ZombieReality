@@ -24,6 +24,10 @@ public class Movement : MonoBehaviour
 
     bool grounded = true;
 
+    RaycastHit holder = new RaycastHit();
+
+    public float Height { get => (head.position.y - transform.position.y) / transform.localScale.y; }
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -46,6 +50,7 @@ public class Movement : MonoBehaviour
         pos -= head.position;
         transform.position += pos;
 
+        rb.isKinematic = isPaused;
         if (isPaused)
             return;
 
@@ -56,8 +61,7 @@ public class Movement : MonoBehaviour
         vel = head.rotation * vel;
         vel.y = rb.velocity.y;
 
-        if (!grounded)
-            vel.y += Physics.gravity.y * Time.deltaTime;
+        vel.y += Physics.gravity.y * Time.deltaTime;
 
         rb.velocity = vel; // TODO: Recode for Kinematic movement
     }
@@ -74,24 +78,21 @@ public class Movement : MonoBehaviour
 
     void GroundCheck()
     {
-        float height = (((head.position.y - transform.position.y) / transform.localScale.y) / 2) - col.radius;
-
-        grounded = Physics.SphereCast(colliderPos.position, col.radius - 0.05f, Vector3.down, out RaycastHit hit, height + 0.06f);
+        grounded = Physics.SphereCast(head.position, col.radius / 2.0f, 
+            Vector3.down, out holder, Height);
     }
 
     void CalcCollider()
     {
-        float height = (head.position.y - transform.position.y) / transform.localScale.y;
-
         Vector3 colPos = colliderPos.localPosition;
-        colPos.y = height / 2;
+        colPos.y = Height / 2.0f;
         colliderPos.localPosition = colPos;
         colPos.x = head.position.x;
         colPos.y = colliderPos.position.y;
         colPos.z = head.position.z;
         colliderPos.position = colPos;
 
-        height -= col.radius;
-        col.height = (height > 0) ? height : 0;
+        float colHeight = Height - col.radius;
+        col.height = (colHeight > 0) ? colHeight : 0;
     }
 }

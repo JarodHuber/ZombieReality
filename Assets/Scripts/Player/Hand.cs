@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(BaseHand))]
 public class Hand : MonoBehaviour
 {
-    public InputActionMap input = new InputActionMap();
     [SerializeField] GameObject controller = null;
-    [SerializeField] Animator controllerAnim = null;
+
+    BaseHand coreHand = null;
 
     bool isGrabbing = false;
 
@@ -19,72 +20,29 @@ public class Hand : MonoBehaviour
     public Rigidbody Rigidbody { get => rb; }
     Transform controllerOffset = null;
 
-    private void OnEnable()
+    public InputActionMap InputMap { get => coreHand.input; }
+
+    private void Start()
     {
+        coreHand = GetComponent<BaseHand>();
+
+        coreHand.input["GripPress"].performed += AttemptGrab; // Swapped from started to performed w/o tests
+        coreHand.input["GripPress"].canceled += AttemptDrop;
+
         rb = GetComponent<Rigidbody>();
         controllerOffset = controller.transform.GetChild(0);
-
-        input["Grab"].performed += AttemptGrab; // Swapped from started to performed w/o tests
-        input["Grab"].canceled += AttemptRelease;
-
-        input["Fire"].performed += AttemptTriggerPress;
-        input["Fire"].canceled += AttemptTriggerRelease;
-
-        input["ThumbHover"].performed += AttemptThumbHover;
-        input["ThumbHover"].canceled += AttemptThumbRelease;
-
-        input.Enable();
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
-        input["Grab"].performed -= AttemptGrab; // Swapped from started to performed w/o tests
-        input["Grab"].canceled -= AttemptRelease;
-
-        input["Fire"].performed -= AttemptTriggerPress;
-        input["Fire"].canceled -= AttemptTriggerRelease;
-
-        input["ThumbHover"].performed -= AttemptThumbHover;
-        input["ThumbHover"].canceled -= AttemptThumbRelease;
-
-        input.Disable();
-    }
-
-    public void AttemptTriggerPress(InputAction.CallbackContext context)
-    {
-        if (isGrabbing)
-            return;
-
-        controllerAnim.SetBool("TriggerPressed", true);
-    }
-    public void AttemptTriggerRelease(InputAction.CallbackContext context)
-    {
-        if (isGrabbing)
-            return;
-
-        controllerAnim.SetBool("TriggerPressed", false);
-    }
-    public void AttemptThumbHover(InputAction.CallbackContext context)
-    {
-        if (isGrabbing)
-            return;
-
-        controllerAnim.SetBool("ThumbDown", true);
-    }
-    public void AttemptThumbRelease(InputAction.CallbackContext context)
-    {
-        if (isGrabbing)
-            return;
-
-        controllerAnim.SetBool("ThumbDown", false);
+        coreHand.input["GripPress"].performed -= AttemptGrab; // Swapped from started to performed w/o tests
+        coreHand.input["GripPress"].canceled -= AttemptDrop;
     }
 
     public void AttemptGrab(InputAction.CallbackContext context)
     {
         if (isGrabbing)
             return;
-
-        controllerAnim.SetBool("GripPressed", true);
 
         if (selectedObj)
         {
@@ -94,15 +52,12 @@ public class Hand : MonoBehaviour
                 Grab();
         }
     }
-    public void AttemptRelease(InputAction.CallbackContext context)
+    public void AttemptDrop(InputAction.CallbackContext context)
     {
-        if (isGrabbing)
-        {
-            UnGrab();
+        if (!isGrabbing)
             return;
-        }
 
-        controllerAnim.SetBool("GripPressed", false);
+        UnGrab();
     }
 
     public void Grab()

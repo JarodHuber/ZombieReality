@@ -8,8 +8,9 @@ public class EnemyManager : MonoBehaviour
     public enum SpawnStage { WAITFORWAVEEND, PREPAREWAVE, SPAWNENEMIES }
 
     #region Variables
-    bool isPaused = false;
+    [SerializeField] bool isPaused = false;
 
+    [Space(10)]
     public Player player = null;
 
     [Space(10)]

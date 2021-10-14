@@ -299,7 +299,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4186652845562687442}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: -7.857, z: 0}
 --- !u!65 &4210905395046265403
 BoxCollider:
@@ -1492,7 +1492,6 @@ Transform:
   - {fileID: 4186652845562687486}
   - {fileID: 4186652845562687444}
   - {fileID: 3243514265215077119}
-  - {fileID: 5556771824449739857}
   - {fileID: 8380641452070362672}
   - {fileID: 5943498928258475165}
   m_Father: {fileID: 0}
@@ -1540,7 +1539,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4186652845562687444}
   - component: {fileID: 4186652845559480030}
-  - component: {fileID: 2778567180117697333}
   m_Layer: 16
   m_Name: Hand_L
   m_TagString: Untagged
@@ -1641,20 +1639,6 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.000014132063, y: 0.0030211578, z: 0.0002937435}
     m_Extent: {x: 0.0003646086, y: 0.0013348161, z: 0.0009217796}
   m_DirtyAABB: 0
---- !u!64 &2778567180117697333
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4186652845562655668}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &4186652845562655670
 GameObject:
   m_ObjectHideFlags: 0
@@ -2407,36 +2391,6 @@ CapsuleCollider:
   m_Height: 2.38098
   m_Direction: 0
   m_Center: {x: -0.65367067, y: -0.03808025, z: 0.15344998}
---- !u!1 &6939111690208609897
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5556771824449739857}
-  m_Layer: 16
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5556771824449739857
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6939111690208609897}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4186652845562687442}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7287630258781288587
 GameObject:
   m_ObjectHideFlags: 0
@@ -2601,7 +2555,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4186652845562687442}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: -4.551, z: 0}
 --- !u!65 &504146944781591559
 BoxCollider:

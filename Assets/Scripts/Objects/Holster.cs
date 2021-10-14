@@ -33,7 +33,7 @@ public class Holster : MonoBehaviour
             }
         }
         else
-            Debug.LogError("Trying to snap to a holster that won't take it");
+            Debug.LogWarning("Trying to snap to a holster that won't take it");
     }
 
     public bool HolsterContains(GrabbableObj.ObjectType objectType)
