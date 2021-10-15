@@ -178,7 +178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ad10ec32309f8f49b6926623f89ecfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 2
+  type: 4
   damage: 50
   radius: 4
   explosionMod: 10

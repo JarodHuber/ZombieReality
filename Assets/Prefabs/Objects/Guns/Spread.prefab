@@ -365,7 +365,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d12b002ad1bc31143b755fae3fbcdebf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
+  type: 2
+  snapOffset: {fileID: 0}
   frontBarrel: {fileID: 4362265723522472283}
   backBarrel: {fileID: 4362265724812383904}
   muzzleFlash: {fileID: 5540939989576214948}

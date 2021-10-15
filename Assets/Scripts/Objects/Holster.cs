@@ -8,13 +8,27 @@ public class Holster : MonoBehaviour
     public enum ObjectsToHolster 
     { 
         None = 0, 
-        Gun = 1, 
-        Grenade = 1 << 1 
+        Default = 1,
+        Gun = 1 << 1, 
+        Grenade = 1 << 2 
     }
 
     public ObjectsToHolster holster;
     [SerializeField] Transform gunAnchor, grenadeAnchor;
-    public bool isHolstering = false;
+    [SerializeField] bool isHolstering = false;
+    AudioSource src = null;
+
+    public bool IsHolstering => isHolstering;
+
+    private void Start()
+    {
+        src = GetComponent<AudioSource>();
+    }
+    public void ToggleHolster()
+    {
+        src.Play();
+        isHolstering = !isHolstering;
+    }
 
     public void HolsterObject(GameObject objToHolster, GrabbableObj.ObjectType holsterType)
     {

@@ -196,33 +196,6 @@ MonoBehaviour:
     max: 5
   healthRegenCycle:
     max: 1
---- !u!135 &6541081350147656380
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4960351989457354803}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.1
-  m_Center: {x: 0, y: -0.04, z: -0.015}
---- !u!114 &579098937922816194
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4960351989457354803}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eddbbe1f26086934280115f713634a9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controller: {fileID: 4395679041884757334}
-  isPaused: 0
 --- !u!135 &7181754163944221502
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -249,6 +222,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 2072232517886076151}
+  isPaused: 0
+--- !u!135 &6541081350147656380
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4960351989457354803}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.1
+  m_Center: {x: 0, y: -0.04, z: -0.015}
+--- !u!114 &579098937922816194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4960351989457354803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eddbbe1f26086934280115f713634a9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 4395679041884757334}
   isPaused: 0
 --- !u!1 &8983377661778664707
 GameObject:
@@ -430,6 +430,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 844014553053336871, guid: 710db8445fd28f04a9564413f8afc99d,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 80
+      objectReference: {fileID: 0}
     - target: {fileID: 844014553053336873, guid: 710db8445fd28f04a9564413f8afc99d,
         type: 3}
       propertyPath: m_Name
@@ -669,6 +674,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Mesh
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3385767566296169717, guid: 710db8445fd28f04a9564413f8afc99d,
+        type: 3}
+      propertyPath: GravityScale.y
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5175280814548672394, guid: 710db8445fd28f04a9564413f8afc99d,
         type: 3}

@@ -7,9 +7,9 @@ public class GrabbableObj : MonoBehaviour
 {
     public enum ObjectType
     {
-        DEFAULT = 0,
-        GUN = 1,
-        GRENADE = 1 << 1
+        DEFAULT = 1,
+        GUN = 1 << 1,
+        GRENADE = 1 << 2
     }
 
     [SerializeField] ObjectType type = ObjectType.DEFAULT;
@@ -57,8 +57,8 @@ public class GrabbableObj : MonoBehaviour
         //joint = gameObject.AddComponent<FixedJoint>();
         //joint.connectedBody = handGrabbing.Rigidbody;
 
-        if (hoveredHolster && hoveredHolster.isHolstering)
-            hoveredHolster.isHolstering = false;
+        if (hoveredHolster && hoveredHolster.IsHolstering)
+            hoveredHolster.ToggleHolster();
         else
             rb.isKinematic = true;
 
@@ -74,9 +74,9 @@ public class GrabbableObj : MonoBehaviour
     {
         hand = null;
 
-        if (hoveredHolster && !hoveredHolster.isHolstering)
+        if (hoveredHolster && !hoveredHolster.IsHolstering && hoveredHolster.HolsterContains(type))
         {
-            hoveredHolster.HolsterContains(type);
+            hoveredHolster.ToggleHolster();
             transform.SetParent(hoveredHolster.transform);
             return;
         }

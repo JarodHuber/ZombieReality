@@ -6,19 +6,14 @@ using UnityEngine.InputSystem;
 
 public class HolsterRig : MonoBehaviour
 {
-    public List<Holster> holsters { get; private set; }
     [SerializeField] Transform head;
     [SerializeField] float rotSmooth = 0.3f;
     [SerializeField] float angleBeforeRot = 30.0f;
     [SerializeField] InputAction moveStick = null;
 
 
-    bool rotating = false;
+    [SerializeField] bool rotating = false;
 
-    private void Start()
-    {
-        holsters = transform.GetComponentsInChildren<Holster>().ToList();
-    }
 
     private void FixedUpdate()
     {
@@ -35,7 +30,17 @@ public class HolsterRig : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation,
                 Quaternion.LookRotation(forward), rotSmooth * Time.deltaTime);
         }
-        else if (rotating && Vector3.Angle(transform.forward, forward) == 0.0f)
+        if (rotating && Vector3.Angle(transform.forward, forward) < angleBeforeRot)
             rotating = false;
+    }
+
+
+    private void OnEnable()
+    {
+        moveStick.Enable();
+    }
+    private void OnDisable()
+    {
+        moveStick.Disable();
     }
 }
