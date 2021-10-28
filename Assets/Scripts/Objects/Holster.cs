@@ -14,6 +14,7 @@ public class Holster : MonoBehaviour
     }
 
     public ObjectsToHolster holster;
+    public MeshRenderer holsterView = null;
     [SerializeField] Transform gunAnchor, grenadeAnchor;
     [SerializeField] bool isHolstering = false;
     AudioSource src = null;

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//TODO: Recode this to minimize duplicate SOs
 [CreateAssetMenu(menuName = "Gun/Bullet/SingleBullet")]
 public class SingleBullet : BulletType
 {

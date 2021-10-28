@@ -109,13 +109,19 @@ public class GrabbableObj : MonoBehaviour
     {
         // Store the holster data for grabbing and releasing
         if (other.CompareTag("Holster"))
+        {
             hoveredHolster = other.GetComponent<Holster>();
+            hoveredHolster.holsterView.enabled = false;
+        }
     }
     private void OnTriggerExit(Collider other)
     {
         // Disable the holster data
         if (hoveredHolster && other.transform == hoveredHolster.transform)
+        {
+            hoveredHolster.holsterView.enabled = true;
             hoveredHolster = null;
+        }
     }
 
     /// <summary>
