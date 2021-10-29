@@ -66,9 +66,11 @@ public class KinematicPlayerMotor : MonoBehaviour, IKinematicMotor
 
         //        velocity.y += Mathf.Sqrt(-2.0f * body.EffectiveGravity.y * jumpHeight);
         //    }
-        //}
+        //}\
+        Vector3 vel = moveWish * moveSpeed;
+        vel.y = oldVelocity.y;
 
-        return moveWish * moveSpeed;
+        return vel;
     }
 
     public void OnMoveHit(ref Vector3 curPosition, ref Vector3 curVelocity, Collider other, Vector3 direction, float pen)
